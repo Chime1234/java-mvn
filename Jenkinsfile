@@ -17,9 +17,9 @@ pipeline {
                 script {
                     echo "building the docker image..."
                     withCredentials([usernamePassword(credentialsId:'docker', passwordVariable:'PASS', usernameVariable: 'USER')]){
-                        sh 'docker build -t chimenco/wtc:v1 .'
-                        sh "echo $PASS | docker login -u $USER --password-stdin" 
-                        sh 'docker push chimenco/wtc:v1'
+                        sh 'docker build -t chimenco/java-mvn:v1 .'
+                        sh "echo $PASS | docker login -u $USER --password-stdin"
+                        sh 'docker push chimenco/java-mvn:v1'
                     }
                 }
             }
