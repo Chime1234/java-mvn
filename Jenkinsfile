@@ -2,6 +2,9 @@ def gv
 
 pipeline {
     agent any
+    environment {
+        NEW_VERSION = '1.2'
+    }
     stages {
         stage("init") {
             steps {
@@ -14,6 +17,7 @@ pipeline {
             steps {
                 script {
                     echo "building jar"
+                    echo "building version ${NEW_VERSION}"
                     //gv.buildJar()
                 }
             }
@@ -34,5 +38,8 @@ pipeline {
                 }
             }
         }
-    }   
+    } 
+    post{
+
+    }  
 }
