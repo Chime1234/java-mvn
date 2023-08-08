@@ -1,40 +1,33 @@
-def gv
-
 pipeline {
     agent any
-    environment {
-        NEW_VERSION = '1.2'
+    tools {
+        maven 'Maven'
     }
     stages {
-        stage("init") {
-            steps {
-                script {
-                    gv = load "script.groovy"
-                }
-            }
-        }
         stage("build jar") {
             steps {
                 script {
-                    echo "building jar"
-                    echo "building version ${NEW_VERSION}"
-                    //gv.buildJar()
+                    echo "building the application"
+                    sh 'mvn package'
                 }
             }
         }
         stage("build image") {
             steps {
                 script {
-                    echo "building image"
-                    //gv.buildImage()
+                    echo "building the docker image..."
+                    withCredentials([usernamePassword(credentialsId:'docker', passwordVariable:'PASS', usernameVariable: 'USER')]){
+                        sh 'docker build -t chimenco/wtc:v1 .'
+                        sh "echo $PASS | docker login -u $USER --password-stdin" 
+                        sh 'docker push chimenco/wtc:v1'
+                    }
                 }
             }
         }
         stage("deploy") {
             steps {
                 script {
-                    echo "deploying"
-                    //gv.deployApp()
+                    echo "deploying the application"
                 }
             }
         }
